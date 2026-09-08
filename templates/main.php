@@ -3,8 +3,8 @@
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
         <?php foreach ($categories as $category): ?>
-        <li class="promo__item promo__item--boards">
-            <a class="promo__link" href="pages/all-lots.html"><?=$category?></a>
+        <li class="promo__item promo__item--<?=$category['character_code']?>">
+            <a class="promo__link" href="pages/all-lots.html"><?=$category['name_category']?></a>
         </li>
         <?php endforeach; ?>
     </ul>
@@ -16,11 +16,11 @@
     <ul class="lots__list">
         <?php foreach ($goods as $good)
             print(include_template('lot_item.php', [
-                "image" => $good['image'],
-                "project" => $good['project'],
-                "name" => $good['name'],
-                "price" => $good['price'],
-                "expired_date" => $good['expired_date'],
+                "image" => $good['img'],
+                "project" => $good['name_category'],
+                "name" => $good['title'],
+                "price" => $good['start_price'],
+                "expired_date" => $good['date_finish'],
         ]));
         ?>
     </ul>

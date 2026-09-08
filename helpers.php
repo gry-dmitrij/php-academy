@@ -156,3 +156,4 @@ function get_dt_range(string $time) {
     $arr_time[1] = $interval->i;
     return $arr_time;
 }
+
