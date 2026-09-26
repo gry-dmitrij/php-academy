@@ -17,7 +17,7 @@ function is_date_valid(string $date) : bool {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    return $dateTimeObj !== false && date_get_last_errors() === false;
 }
 
 /**
@@ -120,30 +120,6 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
     }
 }
 
-/**
- * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
- * @param string $name Путь к файлу шаблона относительно папки templates
- * @param array $data Ассоциативный массив с данными для шаблона
- * @return string Итоговый HTML
- */
-function include_template($__template_path, array $data = []) {
-    $__template_path = 'templates/' . $__template_path;
-    $result = '';
-
-    if (!is_readable($__template_path)) {
-        return $result;
-    }
-
-    ob_start();
-    extract($data);
-    require $__template_path;
-
-    $result = ob_get_clean();
-
-    return $result;
-}
-
-
 function format_price($price): string {
     return number_format($price, 2, "."," ")." ₽";    
 }
@@ -152,8 +128,14 @@ function get_dt_range(string $time) {
     $now = date_create("now");
     $expired = date_create($time);
     $interval = date_diff($expired, $now);
-    $arr_time[0] = $interval->d * 24 + $interval->h;
+    if ($interval->invert == 0) {
+        return [0, 0];
+    }
+    $arr_time[0] = $interval->days * 24 + $interval->h;
     $arr_time[1] = $interval->i;
     return $arr_time;
 }
 
+function get_min_bet(string $price, string $step): string {
+    return number_format((float) $price + (float) $step, 2, '.', '');
+}
