@@ -4,7 +4,6 @@
  * @var array $errors
  * @var array $values
  */
-
 ?>
 <form class="form form--add-lot container <?php if (count($errors)): ?>form--invalid<?php endif;?>" action="/add" method="post" enctype="multipart/form-data">
     <h2>Добавление лота</h2>

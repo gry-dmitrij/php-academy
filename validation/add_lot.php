@@ -1,24 +1,13 @@
 <?php
 function validate_lot(array $data, array $files, array $categories): array {
-    $errors = [];
-    $new_data = $data;
+    $new_data = normalize_strings($data);
 
     $required = ['lot-name', 'message', 'lot-rate', 'lot-step', 'lot-date', 'category'];
 
-    foreach ($required as $field) {
-        $value = $data[$field] ?? '';
-        if (!is_string($value)) {
-            $errors[$field] = 'Неверный формат';
-            $new_data[$field] = '';
-            continue;
-        }
-        if (trim($value) === '') {
-            $errors[$field] = 'Это обязательное поле';
-        }
-    }
+    $errors = validate_required($new_data, $required);
 
     validate_floats(['lot-rate', 'lot-step'], $new_data, $errors);
-    validate_category($data['category'] ?? '', $errors, $categories);
+    validate_category($new_data['category'] ?? '', $errors, $categories);
     validate_date($new_data, $errors);
     validate_image($files['lot-img'] ?? null, 'lot-img', $errors, array_keys(ALLOWED_IMAGE_TYPES));
 
