@@ -10,7 +10,6 @@ if ($user !== null) {
 $con = get_db();
 $categories = get_categories($con);
 
-
 $errors = [];
 $data = [];
 
