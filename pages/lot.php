@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$user = get_auth_user();
 
 $con = get_db();
 $lot = get_lot_by_id($con, $id);
@@ -21,8 +22,7 @@ $categories = get_categories($con);
 $goods = get_lots($con);
 
 $layout = render_layout([
-    "is_auth" => $is_auth,
-    "user_name" => $user_name,
+    "user" => $user,
     "categories" => $categories,
     "show_nav_menu" => true,
 ], 'Лот', $page_content);

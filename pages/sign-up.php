@@ -1,8 +1,15 @@
 <?php
 require_once __DIR__ . '/../bootstrap.php';
 
+$user = get_auth_user();
+if ($user !== null) {
+    header("Location: /", true, 303);
+    exit;
+}
+
 $con = get_db();
 $categories = get_categories($con);
+
 
 $errors = [];
 $data = [];
@@ -17,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             add_user($con, $data['email'], $data['name'], $data['password'], $data['message']);
-            header("Location: /", true, 303);
+            header("Location: /login", true, 303);
             exit;
         } catch (mysqli_sql_exception $e) {
             if ($e->getCode() === 1062) {
@@ -36,8 +43,7 @@ $page_content = include_template('sign-up.php', [
 ]);
 
 $layout = render_layout([
-    "is_auth" => $is_auth,
-    "user_name" => $user_name,
+    "user" => $user,
     "categories" => $categories,
     "show_nav_menu" => true,
 ], 'Регистрация', $page_content);

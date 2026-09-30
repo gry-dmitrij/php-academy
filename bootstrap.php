@@ -9,6 +9,8 @@ require_once ROOT . '/models/all.php';
 
 require_once ROOT . '/validation/all.php';
 
+session_start();
+
 try {
     get_db();
 } catch (mysqli_sql_exception $e) {
@@ -16,6 +18,3 @@ try {
     print('Сайт временно недоступен. Попробуйте позже');
     exit;
 }
-
-$is_auth = rand(0, 1);
-$user_name = 'Dmitrij';
