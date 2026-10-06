@@ -36,7 +36,7 @@ $min_bet = get_min_bet($current_price, $lot['step']);
                 Мин. ставка <span><?= format_price($min_bet) ?></span>
                 </div>
             </div>
-            <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
+            <form class="lot-item__form" action="/" method="post" autocomplete="off">
                 <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
                 <input id="cost" type="text" name="cost" placeholder="<?= $min_bet?>">

@@ -4,10 +4,12 @@
  * @var ?array $user
  * @var array $categories
  * @var string $content
+ * @var ?string $search
  */
 $show_nav_menu = $show_nav_menu ?? false;
 $class = $class ?? "";
 $styles = $styles ?? [];
+$search = $search ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -29,9 +31,9 @@ $styles = $styles ?? [];
         <a class="main-header__logo" href="/">
             <img src="/img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
-        <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru" autocomplete="off">
-            <input type="search" name="search" placeholder="Поиск лота">
-            <input class="main-header__search-btn" type="submit" name="find" value="Найти">
+        <form class="main-header__search" method="get" action="/search" autocomplete="off">
+            <input type="search" name="search" placeholder="Поиск лота" value="<?= htmlspecialchars($search) ?>">
+            <input class="main-header__search-btn" type="submit">
         </form>
         <?php if (isset($user)): ?>
         <a class="main-header__add-lot button" href="/add">Добавить лот</a>

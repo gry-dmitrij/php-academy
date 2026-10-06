@@ -35,25 +35,6 @@ function validate_floats(array $fields, array &$data, array &$errors) {
     }
 }
 
-function validate_float(string $value, $min_value = -PHP_FLOAT_MAX, $max_value = PHP_FLOAT_MAX): string {
-    $FLOAT_ERROR_MESSAGE = "Значение должно быть числом, в дробной части не более двух цифр";
-    $value = trim($value);
-    if (!preg_match('/^\d+([.,]\d{1,2})?$/', $value)) {
-        return $FLOAT_ERROR_MESSAGE;
-    }
-    $float = filter_var(str_replace(',', '.', $value), FILTER_VALIDATE_FLOAT);
-    if ($float === false) {
-        return $FLOAT_ERROR_MESSAGE;
-    }
-    if ($float < $min_value) {
-        return "Величина должна быть не меньше $min_value";
-    }
-    if ($float > $max_value) {
-        return "Величина должна быть не больше $max_value";
-    }
-    return "";
-}
-
 function get_min_value(string $field_name): float {
     switch ($field_name) {
         case 'lot-rate':
