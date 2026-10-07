@@ -6,7 +6,7 @@ require_once ROOT . '/data.php';
 require_once ROOT . '/helpers/all.php';
 require_once ROOT . '/template.php';
 require_once ROOT . '/models/all.php';
-
+require_once ROOT . '/handlers/all.php';
 require_once ROOT . '/validation/all.php';
 
 session_start([

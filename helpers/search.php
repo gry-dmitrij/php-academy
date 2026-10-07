@@ -1,6 +1,6 @@
 <?php
 function create_search_link(string $search, int $page): string {
-    return '/search?' . http_build_query(['search' => $search, 'page' => $page]);
+    return create_link('search', ['search' => $search, 'page' => $page]);
 }
 
 function create_pagination_range(int $page_count, int $page): array {

@@ -4,3 +4,4 @@ require_once __DIR__ . "/add_lot.php";
 require_once __DIR__ . "/sign_up.php";
 require_once __DIR__ . "/login.php";
 require_once __DIR__ . "/search.php";
+require_once __DIR__ . "/lot_bet.php";

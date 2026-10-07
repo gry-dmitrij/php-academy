@@ -9,12 +9,14 @@ function get_lots(mysqli $con): array {
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
 }
 
-function get_lot_by_id(mysqli $con, string $id): ?array {
+function get_lot_by_id(mysqli $con, string $id, bool $lock = false): ?array {
     $sql = "SELECT l.*, name_category
         FROM lots l
         JOIN categories c ON c.id=l.category_id
         WHERE l.id=?";
-
+    if ($lock) {
+        $sql .= " FOR UPDATE";
+    }
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 's', $id);
     mysqli_stmt_execute($stmt);

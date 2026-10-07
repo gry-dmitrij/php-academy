@@ -19,12 +19,13 @@ function is_email($email): bool {
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-function trim_fields(array $data, array $fields): array {
+function trim_fields(array $data, ?array $fields = null): array {
+    $fields ??= array_keys($data);
     foreach ($fields as $field) {
         if (!isset($data[$field])) {
             continue;
         }
-        $value = $data[$field] ?? '';
+        $value = $data[$field];
         if (!is_string($value)) {
             continue;
         }

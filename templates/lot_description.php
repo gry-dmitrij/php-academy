@@ -2,11 +2,13 @@
 /**
  * @var array $lot
  * @var array $bets
+ * @var ?array $errors
  */
 
 // текущая цена — максимальная ставка, а если ставок нет, то стартовая цена лота
 $current_price = $bets ? max(array_column($bets, 'price_bet')) : $lot['start_price'];
 $min_bet = get_min_bet($current_price, $lot['step']);
+$errors ??= [];
 ?>
 <section class="lot-item container">
     <h2><?= htmlspecialchars($lot['title'])?></h2>
@@ -36,11 +38,13 @@ $min_bet = get_min_bet($current_price, $lot['step']);
                 Мин. ставка <span><?= format_price($min_bet) ?></span>
                 </div>
             </div>
-            <form class="lot-item__form" action="/" method="post" autocomplete="off">
-                <p class="lot-item__form-item form__item form__item--invalid">
-                <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="<?= $min_bet?>">
-                <span class="form__error">Введите величину ставки</span>
+            <form class="lot-item__form" action="<?= create_link('lot', ['id' => $lot['id']]) ?>" method="post" autocomplete="off">
+                <p class="lot-item__form-item form__item<?= isset($errors['cost']) ? ' form__item--invalid' : '' ?>">
+                    <label for="cost">Ваша ставка</label>
+                    <input id="cost" type="text" name="cost" placeholder="<?= $min_bet?>">
+                    <?php if (isset($errors['cost'])): ?>
+                        <span class="form__error"><?= $errors['cost'] ?></span>
+                    <?php endif; ?>
                 </p>
                 <button type="submit" class="button">Сделать ставку</button>
             </form>

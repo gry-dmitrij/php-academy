@@ -5,21 +5,30 @@ $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $user = get_auth_user();
 
 $con = get_db();
-$lot = get_lot_by_id($con, $id);
+$lot = get_lot_by_id($con, (string) $id);
 if (!$lot) {
     http_response_code(404);
     return;
 }
+
+$errors = [];
+$bet_data = [];
+$lot_data = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    ['data' => $lot_data, 'errors' => $errors] = handle_lot_bet($con, (string) $id, $user, $_POST);
+}
+
 $bets = get_bets($con, $id);
 
 $page_content = include_template('lot_description.php', [
-        "lot" => $lot,
-        "bets" => $bets,
+        'lot' => $lot,
+        'bets' => $bets,
+        'values' => $lot_data,
+        'errors' => $errors,
     ]);
 
 $categories = get_categories($con);
-
-$goods = get_lots($con);
 
 $layout = render_layout([
     "user" => $user,
