@@ -691,6 +691,14 @@ main.container {
   display: none;
 }
 
+.timer--leading {
+  background-color: #25c22b;
+}
+
+.timer--outbid {
+  background-color: #e38200;
+}
+
 /* Пагинация */
 
 .pagination-list {
