@@ -2,13 +2,16 @@
 /**
  * @var array $lot
  * @var array $bets
+ * @var array $values
  * @var ?array $errors
+ * @var ?bool $can_bet
  */
 
 // текущая цена — максимальная ставка, а если ставок нет, то стартовая цена лота
 $current_price = $bets ? max(array_column($bets, 'price_bet')) : $lot['start_price'];
 $min_bet = get_min_bet($current_price, $lot['step']);
 $errors ??= [];
+$can_bet ??= false;
 ?>
 <section class="lot-item container">
     <h2><?= htmlspecialchars($lot['title'])?></h2>
@@ -34,20 +37,27 @@ $errors ??= [];
                 <span class="lot-item__amount">Текущая цена</span>
                 <span class="lot-item__cost"><?=format_price($current_price) ?></span>
                 </div>
-                <div class="lot-item__min-cost">
-                Мин. ставка <span><?= format_price($min_bet) ?></span>
-                </div>
+                <?php if ($can_bet): ?>
+                    <div class="lot-item__min-cost">
+                        Мин. ставка <span><?= format_price($min_bet) ?></span>
+                    </div>
+                <?php endif; ?>
             </div>
-            <form class="lot-item__form" action="<?= create_link('lot', ['id' => $lot['id']]) ?>" method="post" autocomplete="off">
-                <p class="lot-item__form-item form__item<?= isset($errors['cost']) ? ' form__item--invalid' : '' ?>">
-                    <label for="cost">Ваша ставка</label>
-                    <input id="cost" type="text" name="cost" placeholder="<?= $min_bet?>">
-                    <?php if (isset($errors['cost'])): ?>
-                        <span class="form__error"><?= $errors['cost'] ?></span>
-                    <?php endif; ?>
-                </p>
-                <button type="submit" class="button">Сделать ставку</button>
-            </form>
+            <?php if ($can_bet): ?>
+                <form class="lot-item__form" action="<?= create_link('lot', ['id' => $lot['id']]) ?>" method="post" autocomplete="off">
+                    <p class="lot-item__form-item form__item<?= isset($errors['cost']) ? ' form__item--invalid' : '' ?>">
+                        <label for="cost">Ваша ставка</label>
+                        <input id="cost" type="text" name="cost" placeholder="<?= $min_bet?>" value="<?= htmlspecialchars($values['cost'] ?? '') ?>">
+                        <?php if (isset($errors['cost'])): ?>
+                            <span class="form__error"><?= htmlspecialchars($errors['cost']) ?></span>
+                        <?php endif; ?>
+                    </p>
+                    <button type="submit" class="button">Сделать ставку</button>
+                </form>
+            <?php endif; ?>
+            <?php if (!$can_bet && isset($errors['cost'])): ?>
+                <span class="form__error form__error--show"><?= htmlspecialchars($errors['cost']) ?></span>
+            <?php endif; ?>
         </div>
         <div class="history">
         <h3>История ставок (<span><?=count($bets)?></span>)</h3>

@@ -1,11 +1,12 @@
 <?php
 
-function validate_lot_bet(array $data, float $current_bet, $step): array {
+function validate_lot_bet(array $data, float $min_bet): array {
     $new_data = trim_fields(normalize_strings($data));
-    $errors = [];
-    $error = validate_float($data['cost'], $current_bet + $step);
-    if ($error) {
-        $errors['cost'] = $error;
+    $required = ['cost'];
+    $errors = validate_required($new_data, $required);
+    if (empty($errors)) {
+        ['data' => $new_data, 'errors' => $errors] = validate_floats($new_data, ['cost' => ['min_value' => $min_bet]]);
     }
+
     return ['data' => $new_data, 'errors' => $errors];
 }

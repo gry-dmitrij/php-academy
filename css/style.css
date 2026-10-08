@@ -854,6 +854,10 @@ main.container {
   color: #f84646;
 }
 
+.form__error--show {
+  display: block;
+}
+
 input:invalid .form__error{
   display: block;
 }

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/OSPanel/home/yeticave/**)",
+      "Read(//c/OSPanel/home/**)",
+      "Read(//c/OSPanel/modules/Nginx/**)",
+      "Read(//c/OSPanel/**)"
+    ]
+  }
+}

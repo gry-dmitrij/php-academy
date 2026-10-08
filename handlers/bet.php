@@ -13,10 +13,16 @@ function handle_lot_bet(mysqli $con, int $lot_id, ?array $user, array $data): ar
         if ($lot['user_id'] === $user['id']) {
             return ['data' => $data, 'errors' => ['cost' => 'Нельзя делать ставки на свои лоты']];
         }
+        if (is_lot_finished($lot)) {
+            return ['data' => $data, 'errors' => ['cost' => 'Лот завершен']];
+        }
         $max_bet = get_max_bet($con, $lot_id);
+        if ($max_bet !== null && $max_bet['user_id'] === $user['id']) {
+            return ['data' => $data, 'errors' => ['cost' => 'Ваша ставка уже максимальная']];
+        }
         $max_bet_value = $max_bet['price_bet'] ?? $lot['start_price'];
-
-        ['data' => $data, 'errors' => $errors] = validate_lot_bet($data, $max_bet_value, $lot['step']);
+        $min_bet = get_min_bet($max_bet_value, $lot['step']);
+        ['data' => $data, 'errors' => $errors] = validate_lot_bet($data, $min_bet);
         if (!empty($errors)) {
             return ['data' => $data, 'errors' => $errors];
         }
@@ -24,8 +30,6 @@ function handle_lot_bet(mysqli $con, int $lot_id, ?array $user, array $data): ar
         mysqli_commit($con);
         $committed = true;
         return ['data' => $data, 'errors' => $errors];
-    } catch (Throwable $e) {
-        throw $e;
     } finally {
         if (!$committed) {
             mysqli_rollback($con);
