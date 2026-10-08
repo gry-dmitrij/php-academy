@@ -32,7 +32,10 @@ $max_bet = get_max_bet($con, $lot['id']);
 $page_content = include_template('lot_description.php', [
         'lot' => $lot,
         'bets' => $bets,
-        'can_bet' => !is_lot_finished($lot) && $user !== null && $user['id'] !== $lot['user_id'] && $user['id'] !== ($max_bet['user_id'] ?? null),
+        'can_bet' => !is_lot_finished($lot) &&
+                     $user !== null &&
+                     $user['id'] !== $lot['user_id'] &&
+                     $user['id'] !== ($max_bet['user_id'] ?? null),
         'values' => $lot_data,
         'errors' => $errors,
     ]);
