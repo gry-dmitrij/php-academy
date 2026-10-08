@@ -8,7 +8,7 @@
     <h2>Мои ставки</h2>
     <table class="rates__list">
         <?php foreach($bets as $bet): ?>
-            <?php 
+            <?php
                 $diff_time = get_dt_range(strip_tags($bet['date_finish']));
                 $is_finished = $diff_time[0] === 0 && $diff_time[1] === 0;
                 $is_won = $bet['winner_id'] === $user_id;
@@ -51,7 +51,7 @@
                     <?= format_price($bet['price_bet']) ?>
                 </td>
                 <td class="rates__time">
-                    <?=htmlspecialchars($bet['date_bet'])?>
+                    <?=get_format_date_interval($bet['date_bet'])?>
                 </td>
             </tr>
         <?php endforeach; ?>
