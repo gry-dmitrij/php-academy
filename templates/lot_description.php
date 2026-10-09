@@ -66,7 +66,7 @@ $can_bet ??= false;
             <tr class="history__item">
             <td class="history__name"><?=htmlspecialchars($bet['user_name'])?></td>
             <td class="history__price"><?=format_price($bet['price_bet'])?></td>
-            <td class="history__time"><?=get_format_date_interval($bet['date_bet'])?></td>
+            <td class="history__time"><?=format_relative_date($bet['date_bet'])?></td>
             </tr>
             <?php endforeach;?>
         </table>

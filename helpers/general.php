@@ -129,7 +129,7 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
     }
 }
 
-function get_format_time_interval(int $diff_seconds): string {
+function format_relative_minutes(int $diff_seconds): string {
     $minute_words = ['минуту', 'минуты', 'минут'];
     $hour_words = ['час', 'часа', 'часов'];
     $is_future = $diff_seconds > 0;
@@ -147,13 +147,13 @@ function get_format_time_interval(int $diff_seconds): string {
         throw new RangeException("Интервал $diff_seconds вне диапазона (-" . TIME_AGO_HOUR_LIMIT . ' < diff_seconds < ' . TIME_AGO_HOUR_LIMIT . ')');
     }
 
-    $result = "$value " . get_noun_plural_form($value, ...$words);
+    $result = ($value > 1 ? "$value " : '') . get_noun_plural_form($value, ...$words);
     $result = $is_future ? 'через ' . $result : $result . ' назад';
     $result = mb_ucfirst($result);
     return $result;
 }
 
-function get_format_day_interval(DateTimeImmutable $date, DateTimeImmutable $base_date): string {
+function format_relative_day(DateTimeImmutable $date, DateTimeImmutable $base_date): string {
     $date_day = $date->setTime(0, 0);
     $base_day = $base_date->setTime(0, 0);
     if ($date_day == $base_day) {
@@ -167,18 +167,18 @@ function get_format_day_interval(DateTimeImmutable $date, DateTimeImmutable $bas
         return ($is_future ? 'Завтра' : 'Вчера') . ', в ' . $date->format('H:i');
     }
 
-    return $date->format('d.m.Y в H:i');
+    return $date->format('d.m.y в H:i');
 }
 
-function get_format_date_interval(string $date, ?string $base_date = null): string {
+function format_relative_date(string $date, ?string $base_date = null): string {
     $date = new DateTimeImmutable($date);
     $base_date = $base_date !== null ? new DateTimeImmutable($base_date) : new DateTimeImmutable();
     $diff_seconds = $date->getTimestamp() - $base_date->getTimestamp();
     if (abs($diff_seconds) < TIME_AGO_HOUR_LIMIT) {
-        return get_format_time_interval($diff_seconds);
+        return format_relative_minutes($diff_seconds);
     }
 
-    return get_format_day_interval($date, $base_date);
+    return format_relative_day($date, $base_date);
 }
 
 function format_price($price): string {

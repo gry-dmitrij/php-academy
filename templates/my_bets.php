@@ -58,7 +58,7 @@ $page ??= 1;
                     <?= format_price($bet['price_bet']) ?>
                 </td>
                 <td class="rates__time">
-                    <?=get_format_date_interval($bet['date_bet'])?>
+                    <?=format_relative_date($bet['date_bet'])?>
                 </td>
             </tr>
         <?php endforeach; ?>
