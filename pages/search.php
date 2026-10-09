@@ -13,7 +13,7 @@ $limit = 9;
 $can_search = $search_request !== "" && empty($errors);
 
 $lot_count = $can_search ? count_lots_by_search($con, $search_request) : 0;
-$page_count = (int) ceil($lot_count / $limit);
+$page_count = calc_page_count($lot_count, $limit);
 
 $page = min($page, max($page_count, 1));
 

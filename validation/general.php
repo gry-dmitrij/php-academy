@@ -186,3 +186,18 @@ function format_allowed_types(array $allowed_types): string {
     $text = $allowed_types ? implode(', ', $allowed_types) . ' или ' . $last : $last;
     return str_replace('image/', '', $text);
 }
+
+function validate_page(string $page, ?int $min_page = 1): string {
+    $validated_page = filter_var($page, FILTER_SANITIZE_NUMBER_INT);
+    if ((int) $validated_page < $min_page) {
+        $validated_page = (string) $min_page;
+    }
+    return $validated_page;
+}
+
+function calc_page_count(int $item_count, int $limit): int {
+    if ($limit === 0) {
+        return 0;
+    }
+    return (int) ceil($item_count / $limit);
+}

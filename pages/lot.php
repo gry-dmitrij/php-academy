@@ -19,11 +19,17 @@ $errors = [];
 $lot_data = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    ['data' => $lot_data, 'errors' => $errors] = handle_lot_bet($con, $id, $user, $_POST);
-    if (empty($errors)) {
-        header('Location: ' . create_link('lot', ['id' => $lot['id']]), true, 303);
+    try {
+        ['data' => $lot_data, 'errors' => $errors] = handle_lot_bet($con, $id, $user, $_POST);
+        if (empty($errors)) {
+            header('Location: ' . create_link('lot', ['id' => $lot['id']]), true, 303);
+            exit;
+        }
+    } catch (Throwable $e) {
+        http_response_code(404);
         exit;
     }
+
 }
 
 $bets = get_bets($con, $id);

@@ -12,6 +12,18 @@ function get_bets(mysqli $con, int $lot_id): array {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
+function get_my_bets_count(mysqli $con, int $user_id): int {
+    $sql = "SELECT COUNT(*) count
+            FROM bets
+            WHERE user_id=?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $res_array = $result ? mysqli_fetch_assoc($result) : ['count' => 0];
+    return (int) $res_array['count'];
+}
+
 function get_my_bets(mysqli $con, int $user_id, int $page = 1, int $limit = 10): array {
     $sql = "SELECT b.date_bet, b.price_bet, b.lot_id, l.img, l.title, l.date_finish,
                    l.winner_id, c.character_code, c.name_category, u.contacts,
